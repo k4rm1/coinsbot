@@ -12,9 +12,9 @@ module.exports = {
 
     run: async (client, message, args, data) => {
         let memberDB = await getUser(message.member.id, message.guild.id)
-        const row = new Discord.MessageActionRow()
+        const row = new Discord.ActionRowBuilder()
             .addComponents(
-                new Discord.MessageSelectMenu()
+                new Discord.StringSelectMenuBuilder()
                     .setCustomId('select')
                     .setPlaceholder('Ouvrir une application')
                     .addOptions([
@@ -70,13 +70,13 @@ module.exports = {
                 value: 'demission',
             },]);
         }
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setAuthor({ name: `Téléphone de ${message.author.username}` })
             .setColor(data.color)
             .setImage("https://media.discordapp.net/attachments/931284573306892348/998890205614456862/unknown.png")
         message.reply({ embeds: [embed], allowedMentions: { repliedUser: false }, components: [row] }).then(msg => {
             const collector = msg.createMessageComponentCollector({
-                componentType: "SELECT_MENU",
+                componentType: Discord.ComponentType.SelectMenu,
                 time: 150000
             })
             collector.on("collect", async (select) => {
@@ -121,7 +121,7 @@ module.exports = {
                         select.followUp({ content: `Vous venez de vendre \`${memberDB.Drugs || 0} 💊\` pour \`${gain} coins\` !`, ephemeral: true })
 
                     } else select.followUp({
-                        embeds: [new Discord.MessageEmbed()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor(data.color)
                             .setDescription(`:x: Vous devez avoir la capacité **blanchisseur** pour utiliser cette commande !`)], ephemeral: true
                     })
@@ -129,14 +129,14 @@ module.exports = {
                 if (value == 'blanchisseur') {
                     memberDB = await getUser(message.member.id, message.guild.id)
                     let blprice = data.guild.Prices["blanchisseurprice"] || items.capacite.blanchisseur.price
-                    let Embed = new Discord.MessageEmbed()
+                    let Embed = new Discord.EmbedBuilder()
                         .setColor(data.color)
                         .setDescription(`:x: Vous avez besoin de ${blprice} réputations pour devenir un **blanchisseur**`);
                     if (parseInt(memberDB.Rep) < parseInt(blprice)) return select.followUp({ embeds: [Embed], ephemeral: true })
 
                     if (memberDB.Capacite === "blanchisseur") return select.followUp({ content: `:x: Vous êtes déjà un **blanchisseur**`, ephemeral: true })
                     memberDB.update({Capacite: "blanchisseur"}, { where: { primary: memberDB.primary }})
-                    let Embed2 = new Discord.MessageEmbed()
+                    let Embed2 = new Discord.EmbedBuilder()
                         .setColor(data.color)
                         .setDescription(`:white_check_mark: Vous avez obtenu la capacité **blanchisseur** pour \`${blprice} rep\` et pouvez désormais convertir les :pill: en :coin: !`);
                     memberDB.decrement('Rep', { by: blprice });
@@ -145,7 +145,7 @@ module.exports = {
                 if (value == 'cultivateur') {
                     memberDB = await getUser(message.member.id, message.guild.id)
                     let culprice = data.guild.Prices["cultivateurprice"] || items.capacite.cultivateur.price
-                    let Embed = new Discord.MessageEmbed()
+                    let Embed = new Discord.EmbedBuilder()
                         .setColor(data.color)
                         .setDescription(`:x: Vous avez besoin de ${culprice} réputations pour être **cultivateur** !`);
 
@@ -153,7 +153,7 @@ module.exports = {
                     if (memberDB.Capacite === "cultivateur") return select.followUp({ content: `:x: Vous êtes déjà un **cultivateur**`, ephemeral: true })
                     memberDB.update({Capacite: "cultivateur"}, { where: { primary: memberDB.primary }})
                     memberDB.decrement('Rep', { by: culprice });
-                    let Embed2 = new Discord.MessageEmbed()
+                    let Embed2 = new Discord.EmbedBuilder()
                         .setColor(data.color)
                         .setDescription(`:white_check_mark: Vous avez obtenu la capacité **cultivateur** pour \`${culprice} rep\` et débloquez la commande \`recolt\` !`);
                     select.followUp({ embeds: [Embed2], ephemeral: true })
@@ -162,7 +162,7 @@ module.exports = {
                     memberDB = await getUser(message.member.id, message.guild.id)
                     if (!memberDB.Capacite) return select.followUp({ content: `:x: Vous n'avez pas de capacité !`, ephemeral: true })
                     memberDB.update({Capacite: null}, { where: { primary: memberDB.primary }})
-                    let Embed2 = new Discord.MessageEmbed()
+                    let Embed2 = new Discord.EmbedBuilder()
                         .setColor(data.color)
                         .setDescription(`:white_check_mark: Vous avez abandonné votre capacité **${capacite}** !`);
                     select.followUp({ embeds: [Embed2], ephemeral: true })

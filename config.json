@@ -1,7 +1,7 @@
 {
     "token": "",
     "default_prefix": "&",
-    "owner": [ "", ""],
+    "owner": [""],
     "max_guild": 10,
     
     "webhookerror": {
@@ -11,6 +11,17 @@
     "webhookratelimit": {
       "id": "",
       "token": ""
+  },
+
+  "coinsbot": {
+    "token": "",
+    "botId": "",
+    "prefix": "&",
+    "owner": "",
+    "max_guild": "30",
+    "DateStart": "'2024-04-10 15:41:17",
+    "Status": "/uhq",
+    "activitytype": "STREAMING"
   }
 
 }
