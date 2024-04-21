@@ -1,4 +1,2 @@
-# coinsbot
-- Version qui date de juillet 2023
-- Leak by roks 
-- Patch en cours sur : https://discord.gg/GgBpw3KdNW
+ATTENTION : JE NE SUIS PAS RESPONSABLE DES PROBLMEMES COMIS PAR CE SCRIPT OU DES LOGICIELS MALVEILLANTS
+- C'est un leak !!
